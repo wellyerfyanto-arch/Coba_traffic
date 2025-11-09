@@ -1,0 +1,16 @@
+{
+  "sessions": [
+    {
+      "session_id": "sess_001",
+      "profile_name": "profile_mobile_1",
+      "user_agent": "mobile",
+      "proxy_config": "http://user:pass@proxy1.com:8080",
+      "target_url": "https://example.com",
+      "status": "running",
+      "current_step": "scrolling",
+      "start_time": "2024-01-15T10:30:00Z",
+      "progress": 60
+    }
+  ],
+  "session_counter": 1
+}
