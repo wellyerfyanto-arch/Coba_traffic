@@ -3,11 +3,15 @@ builder = "nixpacks"
 
 [build.phases.setup]
 cmds = [
+  # Update package lists and install system dependencies for Playwright
   "apt-get update",
-  "apt-get install -y wget git python3-pip",
+  "apt-get install -y wget python3-pip",
+  # Install Playwright for Python
   "pip install playwright",
-  "playwright install chromium",
-  "playwright install-deps"
+  # Install the necessary system libraries that browsers need to run
+  "apt-get install -y libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libgbm1 libasound2",
+  # Install the Chromium browser and its dependencies
+  "playwright install --with-deps chromium"
 ]
 
 [deploy]
