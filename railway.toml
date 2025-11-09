@@ -3,24 +3,26 @@ builder = "nixpacks"
 
 [build.environment]
 NIXPKGS_ALLOW_UNFREE = "1"
+PYTHONUNBUFFERED = "1"
 
 [build.phases.setup]
 cmds = [
-  # Install Chrome dan dependencies minimal
   "apt-get update",
   "apt-get install -y wget gnupg",
-  "wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google.gpg",
-  "echo 'deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main' > /etc/apt/sources.list.d/google-chrome.list",
-  "apt-get update",
-  "apt-get install -y google-chrome-stable libnss3 libxss1",
-  
-  # Setup chromedriver
-  "CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f3)",
-  "wget -q -O /tmp/chromedriver.zip \"https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROME_VERSION/linux64/chromedriver-linux64.zip\"",
+  "wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -",
+  "echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' > /etc/apt/sources.list.d/google-chrome.list",
+  "apt-get update", 
+  "apt-get install -y google-chrome-stable libnss3 libxss1 libgconf-2-4 libatk-bridge2.0-0",
+  "CHROME_VERSION=$(google-chrome --version | awk '{print $3}')",
+  "wget -q -O /tmp/chromedriver.zip \"https://storage.googleapis.com/chrome-for-testing-public/$CHROME_VERSION/linux64/chromedriver-linux64.zip\"",
   "unzip -q /tmp/chromedriver.zip -d /tmp/",
   "mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/",
   "chmod +x /usr/local/bin/chromedriver"
 ]
 
 [deploy]
-startCommand = "gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120"
+startCommand = "gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120 --workers 2 --threads 4"
+
+# Tambahkan service configuration untuk Railway
+[services.web]
+startCommand = "gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120 --workers 1 --threads 2 --max-requests 100 --max-requests-jitter 10"
