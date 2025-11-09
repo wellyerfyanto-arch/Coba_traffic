@@ -1,0 +1,17 @@
+{
+  "logs": [
+    {
+      "log_id": "log_001",
+      "session_id": "sess_001",
+      "timestamp": "2024-01-15T10:30:00Z",
+      "step": "init_session",
+      "status": "success",
+      "message": "Session started successfully",
+      "details": {
+        "profile_loaded": true,
+        "proxy_connected": true,
+        "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)"
+      }
+    }
+  ]
+}
