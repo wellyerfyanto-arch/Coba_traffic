@@ -1,8 +1,23 @@
 [build]
 builder = "nixpacks"
 
-[deploy]
-startCommand = "gunicorn app:app --bind 0.0.0.0:$PORT"
-
 [build.environment]
 NIXPKGS_ALLOW_UNFREE = "1"
+
+[deploy]
+startCommand = "gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120"
+
+[build.phases.setup]
+cmds = [
+  "apt-get update",
+  "apt-get install -y wget unzip curl",
+  "wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -",
+  "echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' >> /etc/apt/sources.list.d/google.list",
+  "apt-get update",
+  "apt-get install -y google-chrome-stable",
+  "CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f3)",
+  "wget -q https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROME_VERSION/linux64/chromedriver-linux64.zip",
+  "unzip -q chromedriver-linux64.zip -d /usr/local/bin/",
+  "chmod +x /usr/local/bin/chromedriver-linux64/chromedriver",
+  "ln -s /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver"
+]
