@@ -1,17 +1,32 @@
 [build]
 builder = "nixpacks"
 
+[build.environment]
+PLAYWRIGHT_BROWSERS_PATH = "/app/ms-playwright"
+
 [build.phases.setup]
 cmds = [
-  # Update package lists and install system dependencies for Playwright
+  # Update dan install system dependencies
   "apt-get update",
-  "apt-get install -y wget python3-pip",
-  # Install Playwright for Python
+  "apt-get install -y wget python3-pip curl",
+  
+  # Install Python dependencies
   "pip install playwright",
-  # Install the necessary system libraries that browsers need to run
-  "apt-get install -y libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libgbm1 libasound2",
-  # Install the Chromium browser and its dependencies
-  "playwright install --with-deps chromium"
+  
+  # Install system libraries yang diperlukan browser
+  "apt-get install -y libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libgbm1 libasound2 libxcomposite1 libxrandr2 libxdamage1",
+  
+  # Install Chromium browser ke custom path
+  "PLAYWRIGHT_BROWSERS_PATH=/app/ms-playwright playwright install chromium",
+  "PLAYWRIGHT_BROWSERS_PATH=/app/ms-playwright playwright install-deps",
+  
+  # Verifikasi install
+  "echo '=== Browser Installation Verification ==='",
+  "ls -la /app/ms-playwright/",
+  "echo '=== Chromium Executable ==='",
+  "find /app/ms-playwright -name 'chrome' -type f",
+  "echo '=== Playwright Version ==='",
+  "playwright --version"
 ]
 
 [deploy]
