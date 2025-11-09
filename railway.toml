@@ -6,30 +6,22 @@ NIXPKGS_ALLOW_UNFREE = "1"
 
 [build.phases.setup]
 cmds = [
-  # Update dan install dependencies dasar
+  # Update package list
   "apt-get update",
-  "apt-get install -y wget gnupg ca-certificates",
   
-  # Install Chrome dari repository official
-  "wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /usr/share/keyrings/google-chrome.gpg",
-  "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main' > /etc/apt/sources.list.d/google-chrome.list",
-  "apt-get update",
-  "apt-get install -y google-chrome-stable",
+  # Install Chromium browser (lebih mudah di Linux)
+  "apt-get install -y chromium chromium-driver",
   
-  # Install libraries yang diperlukan Chrome
-  "apt-get install -y libnss3 libxss1 libgconf-2-4 libatk-bridge2.0-0 libgtk-3-0 libx11-xcb1 libdrm2 libxkbcommon0 libasound2 libxcomposite1 libxrandr2 libgbm1",
+  # Install semua library yang diperlukan
+  "apt-get install -y libnss3 libxss1 libgconf-2-4 libatk-bridge2.0-0 libgtk-3-0 libx11-xcb1 libdrm2 libxkbcommon0 libasound2 libxcomposite1 libxrandr2 libgbm1 fonts-liberation",
   
-  # Setup chromedriver
-  "CHROME_VERSION=$(google-chrome --version | awk '{print $3}')",
-  "echo \"Installing ChromeDriver for Chrome version: $CHROME_VERSION\"",
-  "wget -q -O /tmp/chromedriver.zip \"https://storage.googleapis.com/chrome-for-testing-public/$CHROME_VERSION/linux64/chromedriver-linux64.zip\"",
-  "unzip -q /tmp/chromedriver.zip -d /tmp/",
-  "mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/",
-  "chmod +x /usr/local/bin/chromedriver",
+  # Create symlinks untuk compatibility dengan Selenium
+  "ln -sf /usr/bin/chromium /usr/bin/google-chrome",
+  "ln -sf /usr/bin/chromedriver /usr/local/bin/chromedriver",
   
-  # Verifikasi install
-  "echo \"Chrome version:\" && google-chrome --version",
-  "echo \"ChromeDriver version:\" && chromedriver --version"
+  # Verify installation
+  "echo \"Chromium version:\" && chromium --version",
+  "echo \"Chromedriver version:\" && chromedriver --version"
 ]
 
 [deploy]
