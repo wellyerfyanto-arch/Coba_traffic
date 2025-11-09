@@ -1,0 +1,11 @@
+{
+  "app_name": "Traffic Bot",
+  "version": "1.0.0",
+  "max_sessions": 10,
+  "default_settings": {
+    "scroll_delay_min": 2,
+    "scroll_delay_max": 5,
+    "session_duration": 300,
+    "auto_clear_cache": true
+  }
+}
