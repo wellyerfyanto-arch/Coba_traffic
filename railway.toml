@@ -1,27 +1,13 @@
 [build]
 builder = "nixpacks"
 
-[build.environment]
-NIXPKGS_ALLOW_UNFREE = "1"
-
 [build.phases.setup]
 cmds = [
-  # Update package list
   "apt-get update",
-  
-  # Install Chromium browser (lebih mudah di Linux)
-  "apt-get install -y chromium chromium-driver",
-  
-  # Install semua library yang diperlukan
-  "apt-get install -y libnss3 libxss1 libgconf-2-4 libatk-bridge2.0-0 libgtk-3-0 libx11-xcb1 libdrm2 libxkbcommon0 libasound2 libxcomposite1 libxrandr2 libgbm1 fonts-liberation",
-  
-  # Create symlinks untuk compatibility dengan Selenium
-  "ln -sf /usr/bin/chromium /usr/bin/google-chrome",
-  "ln -sf /usr/bin/chromedriver /usr/local/bin/chromedriver",
-  
-  # Verify installation
-  "echo \"Chromium version:\" && chromium --version",
-  "echo \"Chromedriver version:\" && chromedriver --version"
+  "apt-get install -y wget git python3-pip",
+  "pip install playwright",
+  "playwright install chromium",
+  "playwright install-deps"
 ]
 
 [deploy]
