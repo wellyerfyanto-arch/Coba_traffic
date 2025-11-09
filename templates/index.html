@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Bot Controller</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚦 Traffic Bot Controller</h1>
+            <nav>
+                <a href="#session-control">Control Session</a>
+                <a href="#profile-management">Profile Management</a>
+                <a href="#logs">View Logs</a>
+            </nav>
+        </header>
+
+        <!-- Section 1: Session Control -->
+        <section id="session-control" class="card">
+            <h2>🎯 Control Session</h2>
+            
+            <form id="sessionForm" method="POST" action="/api/create_session">
+                <div class="form-group">
+                    <label for="profile_type">Jenis Device:</label>
+                    <select id="profile_type" name="profile_type" required>
+                        <option value="mobile">Mobile</option>
+                        <option value="desktop">Desktop</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="profile_count">Jumlah Profil:</label>
+                    <input type="number" id="profile_count" name="profile_count" 
+                           min="1" max="10" value="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="target_url">Target URL:</label>
+                    <input type="url" id="target_url" name="target_url" 
+                           placeholder="https://example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="proxy_type">Tipe Koneksi:</label>
+                    <select id="proxy_type" name="proxy_type">
+                        <option value="direct">Direct Connection</option>
+                        <option value="http">HTTP Proxy</option>
+                        <option value="socks5">SOCKS5</option>
+                        <option value="vpn">VPN Extension</option>
+                    </select>
+                </div>
+
+                <!-- Proxy Configuration (muncul jika proxy dipilih) -->
+                <div id="proxy_config" class="proxy-config hidden">
+                    <div class="form-group">
+                        <label for="proxy_host">Proxy Host:</label>
+                        <input type="text" id="proxy_host" name="proxy_host" 
+                               placeholder="proxy.example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="proxy_port">Proxy Port:</label>
+                        <input type="number" id="proxy_port" name="proxy_port" 
+                               placeholder="8080">
+                    </div>
+                    <div class="form-group">
+                        <label for="proxy_username">Username:</label>
+                        <input type="text" id="proxy_username" name="proxy_username">
+                    </div>
+                    <div class="form-group">
+                        <label for="proxy_password">Password:</label>
+                        <input type="password" id="proxy_password" name="proxy_password">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="session_duration">Durasi Session (detik):</label>
+                    <input type="number" id="session_duration" name="session_duration" 
+                           value="300" min="60" max="3600">
+                </div>
+
+                <button type="submit" class="btn-primary">🚀 Start Session</button>
+            </form>
+        </section>
+
+        <!-- Section 2: Profile Management -->
+        <section id="profile-management" class="card">
+            <h2>👤 Manajemen Profil Google</h2>
+            
+            <form id="profileForm" method="POST" action="/api/create_profile">
+                <div class="form-group">
+                    <label for="profile_name">Nama Profil:</label>
+                    <input type="text" id="profile_name" name="profile_name" 
+                           placeholder="Mobile Profile 1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="profile_type">Tipe Device:</label>
+                    <select id="profile_type" name="profile_type" required>
+                        <option value="mobile">Mobile</option>
+                        <option value="desktop">Desktop</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="custom_user_agent">Custom User Agent (opsional):</label>
+                    <textarea id="custom_user_agent" name="custom_user_agent" 
+                              placeholder="Kosongkan untuk auto-generate"></textarea>
+                </div>
+
+                <button type="submit" class="btn-secondary">➕ Tambah Profil</button>
+            </form>
+
+            <div class="profiles-list">
+                <h3>Daftar Profil Tersedia</h3>
+                <div id="profilesContainer">
+                    <!-- Profiles will be loaded here via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Active Sessions -->
+        <section id="active-sessions" class="card">
+            <h2>📊 Session Aktif</h2>
+            <div id="sessionsContainer">
+                <!-- Active sessions will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Section 4: Logs -->
+        <section id="logs" class="card">
+            <h2>📝 Log Session</h2>
+            <div class="log-controls">
+                <button id="refreshLogs" class="btn-secondary">🔄 Refresh Logs</button>
+                <button id="clearLogs" class="btn-danger">🗑️ Clear Logs</button>
+            </div>
+            <div id="logsContainer" class="logs-container">
+                <!-- Logs will be loaded here -->
+            </div>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+              </html>
